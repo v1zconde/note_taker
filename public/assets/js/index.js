@@ -35,8 +35,7 @@ const deleteNote = (id) => {
 // If there is an activeNote, display it, otherwise render empty inputs
 const renderActiveNote = () => {
   $saveNoteBtn.hide();
-  console.log(activeNote)
-  if (activeNote.id) {
+  if (activeNote.id || activeNote.id === 0) {
     $noteTitle.attr("readonly", true);
     $noteText.attr("readonly", true);
     $noteTitle.val(activeNote.title);
@@ -68,14 +67,11 @@ const handleNoteDelete = function (event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
   let note = $(this).parent(".list-group-item").data("id");
-console.log(note)
   if (activeNote.id === note) {
     activeNote = {};
   }
-  
     deleteNote(note)
     getAndRenderNotes();
-
     renderActiveNote();
 };
 
@@ -128,16 +124,13 @@ const renderNoteList = (notes) => {
     ids++
     const $li = create$li(note.title).data(note);
     $li.data("id", ids)
-    console.log($li)
     noteListItems.push($li);
   });
   // liCount = -1;
   $noteList.append(noteListItems);
 };
-
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => {
-  
   return getNotes().then(renderNoteList);
 };
 
