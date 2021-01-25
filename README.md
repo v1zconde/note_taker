@@ -64,7 +64,7 @@ Github Repo URL:
 [https://github.com/v1zconde/note_taker](https://github.com/v1zconde/note_taker)
 
 Deployed Heroku: 
-[....](....)
+[https://evening-wildwood-02150.herokuapp.com/](https://evening-wildwood-02150.herokuapp.com/)
 
 How to use Video: 
 [Watch Video](https://drive.google.com/file/d/1M3o9R62rXwYW22As0OcWVMFsSh6ZRhMw/view)
