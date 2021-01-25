@@ -24,7 +24,7 @@ module.exports = app => {
             let newNote = req.body;
             notes.push(newNote);
             updateDb();
-            return console.log("Added new note: "+newNote.title);
+            console.log("Added new note: "+newNote.title);
         });
 
         // Retrieves a note with specific id
@@ -35,7 +35,7 @@ module.exports = app => {
 
         // Deletes a note with specific id
         app.delete("/api/notes/:id", function(req, res) {
-            console.log("delete" + req.params.id)
+          
             notes.splice(req.params.id, 1);
             updateDb();
             console.log("Deleted note with id "+req.params.id);

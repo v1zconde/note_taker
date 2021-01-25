@@ -6,7 +6,6 @@ const $noteList = $(".list-container .list-group");
 
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
-let liCount = 0;
 let lastId = 0;
 // A function for getting all notes from the db
 const getNotes = () => {
@@ -68,22 +67,21 @@ const handleNoteSave = function () {
 const handleNoteDelete = function (event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
-
   let note = $(this).parent(".list-group-item").data("id");
 console.log(note)
   if (activeNote.id === note) {
     activeNote = {};
   }
-  note--
+  
     deleteNote(note)
     getAndRenderNotes();
+
     renderActiveNote();
 };
 
 // Sets the activeNote and displays it
 const handleNoteView = function () {
   activeNote = $(this).data();
-  console.log(activeNote)
   renderActiveNote();
 };
 
@@ -111,37 +109,35 @@ const renderNoteList = (notes) => {
   // Returns jquery object for li with given text and delete button
   // unless withDeleteButton argument is provided as false
   const create$li = (text, withDeleteButton = true) => {
-    const $li = $("<li class='list-group-item' data-id="+ liCount+">");
-    
+    const $li = $("<li class='list-group-item'>");
     const $span = $("<span>").text(text);
     $li.append($span);
-
     if (withDeleteButton) {
       const $delBtn = $(
-        "<i class='fas fa-trash-alt float-right text-danger delete-note' data-id=" + liCount +">"
+        "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
       );
       $li.append($delBtn);
     }
     return $li;
   };
-
   if (notes.length === 0) {
     noteListItems.push(create$li("No saved Notes", false));
   }
-
+  let ids = -1;
   notes.forEach((note) => {
-    liCount++
+    ids++
     const $li = create$li(note.title).data(note);
-    
+    $li.data("id", ids)
     console.log($li)
     noteListItems.push($li);
   });
-  liCount = -1;
+  // liCount = -1;
   $noteList.append(noteListItems);
 };
 
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => {
+  
   return getNotes().then(renderNoteList);
 };
 
