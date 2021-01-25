@@ -1,14 +1,14 @@
 const fs = require('fs');
 const path = require('path');
-
+var note;
 
 
 module.exports = app => {
 
     fs.readFile("./db/db.json","utf8", (err, data) => {
         if (err) throw err;
-        var notes = JSON.parse(data);
-
+        notes = JSON.parse(data);
+    });
         // API ROUTES
         // ========================================================
     
@@ -35,6 +35,7 @@ module.exports = app => {
 
         // Deletes a note with specific id
         app.delete("/api/notes/:id", function(req, res) {
+            console.log("delete" + req.params.id)
             notes.splice(req.params.id, 1);
             updateDb();
             console.log("Deleted note with id "+req.params.id);
@@ -60,7 +61,7 @@ module.exports = app => {
             });
         }
 
-    });
+   
     
 }
 

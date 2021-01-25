@@ -6,7 +6,8 @@ const $noteList = $(".list-container .list-group");
 
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
-let liCount = -1;
+let liCount = 0;
+let lastId = 0;
 // A function for getting all notes from the db
 const getNotes = () => {
   return $.ajax({
@@ -35,7 +36,7 @@ const deleteNote = (id) => {
 // If there is an activeNote, display it, otherwise render empty inputs
 const renderActiveNote = () => {
   $saveNoteBtn.hide();
-
+  console.log(activeNote)
   if (activeNote.id) {
     $noteTitle.attr("readonly", true);
     $noteText.attr("readonly", true);
@@ -54,12 +55,13 @@ const handleNoteSave = function () {
   const newNote = {
     title: $noteTitle.val(),
     text: $noteText.val(),
+    id: lastId,
   };
-
-    saveNote(newNote)
+    activeNote = newNote;
+    saveNote(newNote);
     getAndRenderNotes();
     renderActiveNote();
-  
+
 };
 
 // Delete the clicked note
@@ -67,13 +69,13 @@ const handleNoteDelete = function (event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
 
-  const note = $(this).parent(".list-group-item").data();
-
-  if (activeNote.id === note.id) {
+  let note = $(this).parent(".list-group-item").data("id");
+console.log(note)
+  if (activeNote.id === note) {
     activeNote = {};
   }
-
-    deleteNote(note.id)
+  note--
+    deleteNote(note)
     getAndRenderNotes();
     renderActiveNote();
 };
@@ -81,6 +83,7 @@ const handleNoteDelete = function (event) {
 // Sets the activeNote and displays it
 const handleNoteView = function () {
   activeNote = $(this).data();
+  console.log(activeNote)
   renderActiveNote();
 };
 
@@ -103,13 +106,13 @@ const handleRenderSaveBtn = function () {
 // Render's the list of note titles
 const renderNoteList = (notes) => {
   $noteList.empty();
-
+  lastId = notes.length;
   const noteListItems = [];
-
   // Returns jquery object for li with given text and delete button
   // unless withDeleteButton argument is provided as false
   const create$li = (text, withDeleteButton = true) => {
-    const $li = $("<li class='list-group-item'>");
+    const $li = $("<li class='list-group-item' data-id="+ liCount+">");
+    
     const $span = $("<span>").text(text);
     $li.append($span);
 
@@ -129,10 +132,11 @@ const renderNoteList = (notes) => {
   notes.forEach((note) => {
     liCount++
     const $li = create$li(note.title).data(note);
-    $li.data("id", liCount)
+    
+    console.log($li)
     noteListItems.push($li);
   });
-
+  liCount = -1;
   $noteList.append(noteListItems);
 };
 
